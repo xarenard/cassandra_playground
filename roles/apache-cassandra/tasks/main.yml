@@ -1,0 +1,55 @@
+---
+
+- name: Add Apache Cassandra signing keyL
+  apt_key:
+    url: https://www.apache.org/dist/cassandra/KEYS
+    state: present
+  tags:
+    - apache-cassandra
+
+- name: Add Cassandra source list
+  apt_repository:
+    repo: deb http://www.apache.org/dist/cassandra/debian 311x main
+    state: present
+    filename: cassandra.sources
+  tags:
+    - apache-cassandra
+
+- name: Install Cassandra package
+  apt:
+    name: cassandra
+    update_cache: yes
+  tags:
+    - apache-cassandra
+
+- name: Stopping cassandra
+  service: name=cassandra state=stopped
+  tags:
+    - apache-cassandra
+
+- name: Copy cassandra-rackdc.properties file
+  template: src="cassandra-rackdc.properties.j2" dest="/etc/cassandra/cassandra-rackdc.properties" owner="root" group="root" mode="0644"
+  tags:
+    - apache-cassandra
+
+- name: Copy apache-cassandra.yml file
+  template: src="cassandra.yml.j2" dest="/etc/cassandra/cassandra.yaml" owner="root" group="root" mode="0644"
+  tags:
+    - apache-cassandra
+
+- name: Clean up cassandra
+  file:
+    path: "/var/lib/cassandra/{{ item }}"
+    state: absent
+  with_items:
+    - commitlog
+    - data
+    - hints
+    - saved_caches
+  tags:
+    - apache-cassandra
+
+- name: Restart Cassandra
+  service: name=cassandra state=restarted
+  tags:
+    - apache-cassandra

@@ -1,0 +1,5 @@
+---
+- name: jre
+  hosts: all
+  roles:
+    - jre

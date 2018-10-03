@@ -1,0 +1,5 @@
+---
+- name: Networlk playbook
+  hosts: all
+  roles:
+    - network

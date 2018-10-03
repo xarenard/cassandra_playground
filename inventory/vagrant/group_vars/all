@@ -1,0 +1,6 @@
+internal_iface: enp0s8
+external_iface: enp0s3
+cluster_name: mycluster
+snitch: GossipingPropertyFileSnitch
+
+

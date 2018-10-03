@@ -1,0 +1,5 @@
+---
+- name: cassandra
+  hosts: all
+  roles:
+    - apache-cassandra
